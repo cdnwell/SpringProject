@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+        'use strict';
+
+        class LikeButton extends React.Component {
+            constructor(props){
+                super(props);
+                this.state = {liked : false};
+            }
+            
+            render(){
+                if(this.state.liked){
+                    return 'You liked this';
+                }
+
+                // return React.createElement('button',{onClick: () => this.setState({liked : true})}, 'Like');
+
+                return (
+                    // React에서는 기존 태그는 소문자로, 새로 만든 태그는 대문자로 시작하여야 한다.
+                    // input 같이 한개 태그도 닫는 태그 붙여주어야 오류가 나지 않는다.
+                    // js 코드 부분은 중괄호로 감싸주어야 한다.
+                    // for문과 if문을 못써서 if문 대신에 삼항연산자 사용
+                    // 배열을 사용해서 맵으로해서 리턴함(for문)
+                    // 형제 태그끼리 나란히 올 수 없다. 다른 부모 태그로 꼭 감싸주어야 한다.
+                    // *** return할 태그는 하나만 와야 한다. ***
+                    // 가짜 태그 <> </> fragment 사용하기
+                    // return도 여러 줄이 되면 소괄호로 묶어주기
+                    // 우리가 만든 컴포넌트도 태그라고 보면 됨.
+                    // 그래서 내가 만든 컴포넌트도 여러번 쓸 수 있다.
+                    <button onClick={()=>this.setState({liked:true})}>
+                        {this.state.liked ? 'Liked' : 'Like!'}
+                        {[1, 2, 3].map((i)=>{
+                            return <div>i</div>
+                        })}
+                    </button>
+                );
+            }
+            
+        }
+
+    </script>
+    <script type="text/babel">
+        // ReactDOM.render(<LikeButton/>, document.querySelector('#root')); //React 17버전 코드, React 18버전 코드가 실행 안됨
+        ReactDOM.createRoot(document.querySelector('#root')).render(<LikeButton/>); //React 18버전 코드
+    </script>
+</body>
+
+</html>
