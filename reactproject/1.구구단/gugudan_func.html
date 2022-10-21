@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>함수 컴포넌트-구구단</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // setState랑 ref를 쓰지 않는 컴포넌트는 함수 컴포넌트로 만듦
+        // 함수 컴포넌트에서도 state랑 ref를 쓸 수 있게 React Hooks를 만들어줌
+        // use effect라고 따로 기능도 있음
+        const GuGuDan = () => {
+            // *** 주의 *** 
+            // 클래스 안에 state 넣듯이 화살표 함수 안에 const 값을 넣어주어야 한다.
+            
+            // state가 바뀌면 함수 전체가 다시 실행되기 때문에 클래스보다
+            // 좀 더 느릴 수 있다.
+            
+            // 비구조화 할당 문법 (첫번째 : state, 두번째 : setState)
+            // 비구조화 할당 -> 구조분해 (MDN에서 찾아보기)
+            // 변수 자리에 객체쓰고 배열쓰는 것이 구조분해 문법이다.
+            // 구조분해 할당 = 비구조화 할당 (destructuring)
+
+            // state를 객체로 묶지 않고 하나씩 쪼갰다고 보면됨
+            // useState 매개변수로 초기값이 들어간다.
+            // Hooks에서 state를 선언하는 방법임.
+            // setFirst는 first 전용 setFirst
+            const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+            // setSecond는 second 전용 setSecond
+            const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9));
+            const [value, setValue] = React.useState('');
+            const [result, setResult] = React.useState('');
+            // 초기값 넣어주어도 된다.
+            // hooks에서는 useRef라는 함수로 DOM에 접근한다.
+            // DOM에 접근할 때에는 current라는 것을 하나더 붙여주어야 한다는 차이점만 기억하면
+            // 된다.
+            const inputRef = React.useRef(null);
+            // Hooks 쓸 때에는 setState하기가 힘들어 다 구조분해로 선언한다.
+
+            const onChangeInput = (e) => {
+                setValue(e.target.value);
+            };
+
+            // setState를 다 지우고 아래와 같이 만들어 주면 함수 컴포넌트가 된다.
+            // 옛날 state로 함수를 만드는 경우 함수형으로 나타내기
+            const onSubmitForm = (e) => {
+                e.preventDefault();
+                if(parseInt(value) === first * second){
+                    // 비동기인 이유가 setState를 모아서 한 번에 처리
+                    // 동기면 set할 때 마다 모두 실행 (4번씩)
+                    setResult('정답 : ' + value);
+                    setFirst(Math.ceil(Math.random() * 9));
+                    setSecond(Math.ceil(Math.random() * 9));
+                    setValue('');
+                    inputRef.current.focus();
+                } else {
+                    setResult('땡');
+                    setValue('');
+                    inputRef.current.focus();
+                }
+            }
+
+            // React에서는 class를 못쓴다. javascript 에서는 html class와 헷갈리기 때문에
+            // class => className (html에서 class로 바뀜)
+            // 마찬가지로, label의 for도 바뀐다.
+            // for => htmlFor
+            // React에서 못쓰는 속성 - for, class
+            return <React.Fragment>
+                <div>{first} 곱하기 {second}는?</div>
+                <form onSubmit={onSubmitForm}>
+                    <input ref={inputRef} onChange={onChangeInput} value={value} />    
+                    <button>입력!</button>
+                </form>
+                <div id="result">{result}</div>
+            </React.Fragment>
+        };
+    </script>
+    <script type="text/babel">
+        ReactDOM.createRoot(document.querySelector('#root')).render(<GuGuDan/>); //React 18버전 코드
+    </script>
+</body>
+</html>

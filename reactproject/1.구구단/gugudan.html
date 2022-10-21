@@ -26,12 +26,25 @@
             onSubmit = (e)=>{
                 e.preventDefault();
                 if(parseInt(this.state.value) === this.state.first * this.state.second){
-                    this.setState({
-                        result : this.state.value + ' = 정답!',
-                        first : Math.ceil(Math.random() * 9),
-                        second : Math.ceil(Math.random() * 9),
-                        value : '',
+                    this.setState((prevState) => {
+                        return {
+                            result : prevState.value + ' = 정답!',
+                            first : Math.ceil(Math.random() * 9),
+                            second : Math.ceil(Math.random() * 9),
+                            value : '',
+                        };
                     });
+
+                    // setState안에 this.state가 들어가면 함수를 쓰기로 약속하기
+
+                    // 다른 경우에는 객체 쓰는데 언제 함수 쓰는가.
+                    // this.state가 들어갈 때에는 함수를 쓴다.
+                    // this.setState((prevState) => {
+                    //     return {
+                    //         value : prevState.value + 1,
+                    //     }
+                    // });
+                    this.input.focus();
                 } else {
                     this.setState({
                         result : '땡',
@@ -44,12 +57,22 @@
                 this.setState({value : e.target.value});
             };
 
+            input;
+
+            onRefInput = (c) => { this.input = c; };
+
             render(){
+                // setState를 할 때 렌더를 한다.
+                // 렌더를 많이하면 느려짐
+                // input창에 한번 칠 때 마다 렌더링이 10초가 걸린다면
+                // 10초씩 걸림
+                // 함수도 빼놓는게 좋다. 아니면 렌더링 할 때 마다 함수가 실행된다.
+                console.log('렌더링');
                 return (
                     <React.Fragment>
                         <div>{this.state.first} 곱하기 {this.state.second}는?</div>
                         <form onSubmit={this.onSubmit}>
-                            <input type="number" value={this.state.value} onChange={this.onChange}/>
+                            <input ref={this.onRefInput} type="number" value={this.state.value} onChange={this.onChange}/>
                             <button>입력!</button>
                         </form>
                         <div>{this.state.result}</div>
