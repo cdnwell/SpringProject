@@ -1,5 +1,6 @@
 const path = require('path');
 
+
 module.exports = {
     mode : 'development',
     devtool : 'eval',       // production -> hidden-source-map
@@ -16,7 +17,12 @@ module.exports = {
             test : /\.jsx?$/,
             loader : 'babel-loader',
             options : {
-                presets : ['@babel/preset-env', '@babel/preset-react'],
+                // preset-env 자동으로 옛날 브라우저 지원
+                presets : [['@babel/preset-env',{
+                    targets : {
+                        browsers : ['last 2 chrome versions'],
+                    },
+                }],  '@babel/preset-react'],
                 plugins : [],
             },
         }],

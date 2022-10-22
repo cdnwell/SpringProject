@@ -4,14 +4,54 @@ const React = require('react');
 const { Component } = React;
 
 // 쪼갠 파일에서 쓰는 컴포넌트를 바깥에서도 사용할 수 있게 해주는 것
-class WordRelay extends React.Component{
+class WordRelay extends Component{
     state = {
-        text : 'Hello, webpack',
+        word : '스프링',
+        value : '',
+        result : '',
+    };
+
+    // 클래스 메서드는 (내가 직접만드는 것) 항사 화살표 함수
+    onSubmitForm = (e) => {
+        e.preventDefault();
+        if(this.state.word[this.state.word.length - 1] === this.state.value[0]){
+            this.setState({
+                word : this.state.value,
+                value : '',
+                result : '정답!',
+            });
+            this.input.focus();
+        } else {
+            this.setState({
+                value : '',
+                result : '땡!',
+            });
+            this.input.focus();
+        }
+    };
+
+    onChangeInput = (e) => {
+        this.setState({
+            value : e.target.value,
+        })
+    };
+
+    input;
+
+    onRefInput = (c) => {
+        this.input = c;
     };
 
     render(){
         return (
-            <h1>{this.state.text}</h1>
+            <>
+                <div>{this.state.word}</div>
+                <form onSubmit={this.onSubmitForm}>
+                    <input type="text" ref={this.onRefInput} value={this.state.value} onChange={this.onChangeInput}/>
+                    <button>버튼</button>
+                </form>
+                <div>{this.state.result}</div>
+            </>
         );
     };
 }

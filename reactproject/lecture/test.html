@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class WordRelay extends React.Component{
+            state = {
+                word : '스프링',
+                value : '',
+                result : '',
+            };
+
+            // 클래스 메서드는 (내가 직접만드는 것) 항사 화살표 함수
+            onSubmitForm = (e) => {
+                e.preventDefault();
+                if(this.state.word[this.state.word.length-1] === this.state.value[0]){
+                    this.setState({
+                        word : this.state.value,
+                        value : '',
+                        result : '정답!',
+                    });
+                    this.input.focus();
+                } else {
+                    this.setState({
+                        value : '',
+                        result : '땡!',
+                    });
+                    this.input.focus();
+                }
+            };
+
+            onChangeInput = (e) => {
+                this.setState({
+                    value : e.target.value
+                })
+            };
+
+            input;
+
+            onRefInput = (c) => {
+                this.input = c;
+            };
+
+            render(){
+                return (
+                    <React.Fragment>
+                        <div>{this.state.word}</div>
+                        <form onSubmit={this.onSubmitForm}>
+                            <input type="text" ref={this.onRefInput} value={this.state.value} onChange={this.onChangeInput}/>
+                            <button>입력</button>
+                        </form>
+                        <div>{this.state.result}</div>
+                    </React.Fragment>
+                );
+            };
+        }
+        ReactDOM.createRoot(document.querySelector('#root')).render(<WordRelay/>);
+    </script>
+</body>
+</html>
