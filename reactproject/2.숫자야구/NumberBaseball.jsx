@@ -4,11 +4,15 @@ const { Component } = React;
 
 class NumberBaseball extends Component{
     state = {
-
+        text : 'hello, webpack'
     };
 
     render() {
-
+        return (
+            <>
+                <h1>{this.state.text}</h1>
+            </>
+        );
     };
 }
 
