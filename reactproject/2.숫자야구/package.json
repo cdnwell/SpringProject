@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack"
+    "dev": "webpack serve --env development"
   },
   "author": "cdnwell",
   "license": "MIT",

@@ -35,7 +35,7 @@ const WordRelayHooks = () => {
             <div>{word}</div>
             <form onSubmit={onSubmitForm}>
                 <input type="text" ref={inputRef} onChange={onChangeInput} value={value} />
-                <button>제출</button>
+                <button>헬로</button>
             </form>
             <div>{result}</div>
         </>
