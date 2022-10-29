@@ -1,4 +1,5 @@
 const React = require('react');
+
 const { render } = require('react-dom');
 const { useState } = React;
 
@@ -17,7 +18,7 @@ function getNumbers(){
 const NumberBaseball = () => {
     const [result,setResult] = useState('');
     const [value,setValue] = useState('');
-    const [answer,setAnswer] = useState(getNumbers());
+    const [answer,setAnswer] = useState(getNumbers);
     const [tries,setTries] = useState([]);
 
     const onChangeInput = (e) => {
@@ -32,6 +33,10 @@ const NumberBaseball = () => {
             alert('게임을 다시 시작합니다.');
             setValue('');
             setAnswer(getNumbers());
+            setTries((prevTries) => {
+                return [...prevTries, { try : value, result : '홈런!' }];
+            }); //hooks에서도 옛날 것을 현재 것으로 만들어 주기 때문에
+            //함수형 쓰기
             setTries([]);
         } else {
             const answerArray = value.split('').map(v => parseInt(v));
@@ -50,7 +55,7 @@ const NumberBaseball = () => {
                         ball += 1;
                     }
                 }
-                setTries([...tries, {try : value, result : `${strike} 스트라이크 ${ball} 볼`}]);
+                setTries((prevTries) => [...tries, {try : value, result : `${strike} 스트라이크 ${ball} 볼`}]);
                 setValue('');
             }
         }
