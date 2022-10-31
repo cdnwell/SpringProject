@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬라이드 이미지</title>
+    <style>
+        .box-img{
+            width: 400px;
+            height: 650px;
+            border : 1px solid black;
+        }
+
+
+
+        .thumb-img{
+            height: 78%;
+        }
+
+        .thumb-img img{
+            width: 100%;
+            height: 100%;
+            border: 1px solid #c7c7c7;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+
+
+        .footer-img{
+            width: 100%;
+            height: 22%;
+            text-align: center;
+            position: relative;
+        }
+
+        .footer-img img{
+            box-sizing: border-box;
+            width: calc( 16% );
+            height: 100px;
+            margin-top: 3.5%;
+            margin-left: 2%;
+            margin-right: 2%;
+            border: 1px solid #c7c7c7;
+            border-radius: 6px;
+
+            cursor: pointer;
+        }
+
+
+
+        .footer-stage-hide{
+            position: relative;
+            width: 95%;
+            height: 100%;
+            margin-right: 2.5%;
+            margin-left: 2.5%;
+            overflow: hidden;
+        }
+
+        .footer-stage{
+            position: absolute;
+            box-sizing: border-box;
+            width: 165%;
+            height: 100%;
+            left: -33%;
+        }
+
+        
+
+        .box-img:hover .imgb-nav div{
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .imgb-nav div:hover{
+            background-color: #ff4545;
+        }
+
+        .imgb-nav div{
+            background-color: #b7b7b7;
+            
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+
+            transition: 0.3s;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .imgb-prev {
+            position: absolute;
+            cursor: pointer;
+
+            top: calc( 100% / 2 - 15px );
+            left: -1px;
+        }
+
+        .imgb-next{
+            position: absolute;
+            cursor: pointer;
+            
+            top: calc( 100% / 2 - 15px );
+            right: -1px;
+        }
+
+
+
+        .disabled{
+            display: none;
+        }
+        
+        .stage-img{
+            transition : .3s;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="./dist/app.js"></script>
+</body>
+</html>
