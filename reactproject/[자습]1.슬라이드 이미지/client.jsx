@@ -1,6 +1,7 @@
-const React = require('react');
-const ReactDOM = require('react-dom/client');
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-const SlideImage = require('./SlideImage');
+import SlideImage from './SlideImage';
 
+// ReactDOM.render(<SlideImage />, document.querySelector('#root'));
 ReactDOM.createRoot(document.querySelector('#root')).render(<SlideImage/>);

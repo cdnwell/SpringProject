@@ -1,5 +1,4 @@
-const React = require('react');
-const { useState } = React;
+import React, { useState } from 'react';
 
 const Images = () => {
 
@@ -11,4 +10,4 @@ const Images = () => {
     );
 }
 
-module.exports = Images;
+export default Images;
