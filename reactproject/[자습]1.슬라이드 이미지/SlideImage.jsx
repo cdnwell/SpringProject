@@ -1,12 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import imgArray from './imgArr';
 
+const imgSetting = () => {
+    const arr_img = [];
+    const imgArr = [...imgArray];
+    const slide_img_ea = imgArr.length;
+    for(let i=0;i<5;i++){
+        if(i===0){
+            arr_img.push({ index : imgArr[slide_img_ea-1].index , src : imgArr[slide_img_ea-1].src });
+            continue;
+        }
+        arr_img.push({ index : imgArr[(i - 1) % slide_img_ea].index , src : imgArr[(i - 1) % slide_img_ea].src });
+    }
+    return arr_img;
+};
+
 const SlideImage = () => {
     const [img, setImg] = useState([]);
     const [imgArr, setImgArr] = useState(imgArray);
     const [currImg, setCurrImg] = useState();
     const [stageWidth, setStageWidth] = useState(0);
-    const [imgStyle, setImgStyle] = useState();
+    const [imgStyle, setImgStyle] = useState({
+        transform: `translateX(0)`,
+        transition: `all 0.3s ease-in-out`,
+    });
+    const [currentImgIndex, setCurrentImgIndex] = useState(1);
     const widthRef = useRef();
     const timeout = useRef();
 
@@ -16,18 +34,32 @@ const SlideImage = () => {
         setCurrImg(imgArr[0].src);
     }, []);
 
-    const imgSetting = () => {
-        const arr_img = [];
-        const slide_img_ea = imgArr.length;
-        for(let i=0;i<5;i++){
-            if(i===0){
-                arr_img.push({ index : imgArr[slide_img_ea-1].index , src : imgArr[slide_img_ea-1].src });
-                continue;
-            }
-            arr_img.push({ index : imgArr[(i - 1) % slide_img_ea].index , src : imgArr[(i - 1) % slide_img_ea].src });
+    useEffect(() => {
+        if(currentImgIndex === 0){
+            const x = stageWidth / 5;
+            setCurrentImgIndex(img.length - 2);
+            setTimeout(() => {
+                setImgStyle({
+                    transform: `translateX(${(img.length - 2) * x } px)`,
+                    transition: `0ms`,
+                })
+            }, 400);
+            console.log('useEffect-currentIndex[0]',currentImgIndex);
         }
-        return arr_img;
-    };
+
+        if(currentImgIndex === img.length - 1){
+            const x = stageWidth / 5;
+            setCurrentImgIndex(1);
+            setTimeout(() => {
+                setImgStyle({
+                    transform: `translateX(0)`,
+                    transition: `0ms`,
+                })
+            }, 400);
+            console.log('useEffect-currentIndex[4]',currentImgIndex);
+        }
+
+    },[currentImgIndex]);
 
     const onClickImg = (e) => {
         setCurrImg(e.target.src);
@@ -36,30 +68,14 @@ const SlideImage = () => {
     };
 
     const leftClick = () => {
-        const arr_cpy = [...img];
-        const arr_cpy2 = new Array(5);
-        const slide_img_ea = imgArr.length;
         const x = stageWidth / 5;
-
-        for(let i=0;i<5;i++){
-            if(i===4){
-                //4번째 이미지의 클래스명을 가져온다.
-                // const className = arr_img[4].attr('class');
-                //숫자 파싱
-                const number = arr_cpy[i].index;
-                arr_cpy2[4] = imgArr[(number+1) % slide_img_ea];
-                continue;
-            }
-            arr_cpy2[i] = arr_cpy[i+1];
-        }
-        console.log(arr_cpy2);
         setImgStyle({
-            transform: `translateX(-${x}px)`
+            transform: `translateX(-${x*(currentImgIndex+1)}px)`,
+            transition: `all 0.3s ease-in-out`,
         });
-        console.log('x', x);
-        console.log('imgStyle', imgStyle);
-        timeout.current = setTimeout(() => setImg([...arr_cpy2]),300);
-        console.log(img);
+        setCurrentImgIndex(currentImgIndex - 1);
+        console.log('currIndex',currentImgIndex);
+        console.log('translateX',x*currentImgIndex);
     };
     
     const rightClick = () => {
@@ -73,8 +89,8 @@ const SlideImage = () => {
             </div>
             <div className="footer-img">
                 <div className="footer-stage-hide">
-                    <div className="footer-stage" ref={widthRef}>
-                        {img.map((item, i) => <img key={i} style={imgStyle} src={item.src} className="stage_img" onClick={onClickImg} />)}
+                    <div className="footer-stage" style={imgStyle} ref={widthRef}>
+                        {img.map((item, i) => <img key={i} src={item.src} className="stage_img" onClick={onClickImg} />)}
                     </div>
                 </div>
                 <div className="imgb-nav">
