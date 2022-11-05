@@ -2,16 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import imgArray from './imgArr';
 
 const imgSetting = () => {
-    const arr_img = [];
+    const arr_img = [];     //반환 할 배열 값
     const imgArr = [...imgArray];
     const slide_img_ea = imgArr.length;
-    for(let i=0;i<5;i++){
-        if(i===0){
-            arr_img.push({ index : imgArr[slide_img_ea-1].index , src : imgArr[slide_img_ea-1].src });
-            continue;
-        }
-        arr_img.push({ index : imgArr[(i - 1) % slide_img_ea].index , src : imgArr[(i - 1) % slide_img_ea].src });
+
+    arr_img.push(imgArr[slide_img_ea-1]);
+    for(let i=0;i<4;i++){
+        arr_img.push(imgArr[i%slide_img_ea]);
     }
+
     return arr_img;
 };
 
@@ -20,11 +19,8 @@ const SlideImage = () => {
     const [imgArr, setImgArr] = useState(imgArray);
     const [currImg, setCurrImg] = useState();
     const [stageWidth, setStageWidth] = useState(0);
-    const [imgStyle, setImgStyle] = useState({
-        transform: `translateX(0)`,
-        transition: `all 0.3s ease-in-out`,
-    });
-    const [currentImgIndex, setCurrentImgIndex] = useState(1);
+    const [imgStyle, setImgStyle] = useState();
+    const [currentImgIndex, setCurrentImgIndex] = useState(0);
     const widthRef = useRef();
     const timeout = useRef();
 
@@ -34,32 +30,34 @@ const SlideImage = () => {
         setCurrImg(imgArr[0].src);
     }, []);
 
-    useEffect(() => {
-        if(currentImgIndex === 0){
-            const x = stageWidth / 5;
-            setCurrentImgIndex(img.length - 2);
-            setTimeout(() => {
-                setImgStyle({
-                    transform: `translateX(${(img.length - 2) * x } px)`,
-                    transition: `0ms`,
-                })
-            }, 400);
-            console.log('useEffect-currentIndex[0]',currentImgIndex);
-        }
+    // useEffect(() => {
+    //     if(currentImgIndex === 0){
+    //         const x = stageWidth / 5;
+    //         setCurrentImgIndex(img.length - 2);
+    //         setTimeout(() => {
+    //             setImgStyle({
+    //                 transform: `translateX(${(img.length - 3) * x } px)`,
+    //                 transition: `0ms`,
+    //             });
+    //         }, 400);
+    //         console.log('x',x);
+    //         console.log('useEffect-currentIndex[0]',currentImgIndex);
+    //         console.log('translateX-currI[0]',(img.length - 3)* x);
+    //     }
 
-        if(currentImgIndex === img.length - 1){
-            const x = stageWidth / 5;
-            setCurrentImgIndex(1);
-            setTimeout(() => {
-                setImgStyle({
-                    transform: `translateX(0)`,
-                    transition: `0ms`,
-                })
-            }, 400);
-            console.log('useEffect-currentIndex[4]',currentImgIndex);
-        }
+    //     if(currentImgIndex === img.length - 1){
+    //         const x = stageWidth / 5;
+    //         setCurrentImgIndex(1);
+    //         setTimeout(() => {
+    //             setImgStyle({
+    //                 transform: `translateX(0)`,
+    //                 transition: `0ms`,
+    //             });
+    //         }, 400);  
+    //         console.log('useEffect-currentIndex[4]',currentImgIndex);
+    //     }
 
-    },[currentImgIndex]);
+    // },[currentImgIndex]);
 
     const onClickImg = (e) => {
         setCurrImg(e.target.src);
@@ -69,17 +67,23 @@ const SlideImage = () => {
 
     const leftClick = () => {
         const x = stageWidth / 5;
+        console.log('currIndex-pre',currentImgIndex);
+        setCurrentImgIndex(currentImgIndex - 1);
         setImgStyle({
-            transform: `translateX(-${x*(currentImgIndex+1)}px)`,
+            transform: `translateX(${x*(currentImgIndex-1)}px)`,
             transition: `all 0.3s ease-in-out`,
         });
-        setCurrentImgIndex(currentImgIndex - 1);
         console.log('currIndex',currentImgIndex);
-        console.log('translateX',x*currentImgIndex);
+        console.log('translateX',x*(currentImgIndex-1));
     };
     
     const rightClick = () => {
-
+        const x = stageWidth / 5;
+        setCurrentImgIndex(currentImgIndex + 1);
+        setImgStyle({
+            transform: `translateX(${x*(currentImgIndex+1)}px)`,
+            transition: `all 0.3s ease-in-out`,
+        });
     };
 
     return (
