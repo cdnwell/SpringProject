@@ -16,7 +16,7 @@ const imgSetting = () => {
 
 const SlideImage = () => {
     const [img, setImg] = useState([]);
-    const [imgArr, setImgArr] = useState(imgArray);
+    const [imgArr, setImgArr] = useState(imgArray);     //원본 이미지
     const [currImg, setCurrImg] = useState();
     const [stageWidth, setStageWidth] = useState(0);
     const [imgStyle, setImgStyle] = useState();
@@ -30,34 +30,21 @@ const SlideImage = () => {
         setCurrImg(imgArr[0].src);
     }, []);
 
-    // useEffect(() => {
-    //     if(currentImgIndex === 0){
-    //         const x = stageWidth / 5;
-    //         setCurrentImgIndex(img.length - 2);
-    //         setTimeout(() => {
-    //             setImgStyle({
-    //                 transform: `translateX(${(img.length - 3) * x } px)`,
-    //                 transition: `0ms`,
-    //             });
-    //         }, 400);
-    //         console.log('x',x);
-    //         console.log('useEffect-currentIndex[0]',currentImgIndex);
-    //         console.log('translateX-currI[0]',(img.length - 3)* x);
-    //     }
-
-    //     if(currentImgIndex === img.length - 1){
-    //         const x = stageWidth / 5;
-    //         setCurrentImgIndex(1);
-    //         setTimeout(() => {
-    //             setImgStyle({
-    //                 transform: `translateX(0)`,
-    //                 transition: `0ms`,
-    //             });
-    //         }, 400);  
-    //         console.log('useEffect-currentIndex[4]',currentImgIndex);
-    //     }
-
-    // },[currentImgIndex]);
+    useEffect(() => {
+        let tmpImg = [];
+        const img_len = imgArr.length;
+        tmpImg.push(imgArr[(currentImgIndex-1+img_len)%img_len]);
+        for(let i=0;i<4;i++){
+            tmpImg.push(imgArr[(currentImgIndex+i)%img_len]);
+        }
+        console.log('tmpImg',tmpImg);
+        setImg([...tmpImg]);
+        console.log('img',img);
+        setImgStyle({
+            transform: `translateX(0px)`,
+            transition: `0ms`,
+        });
+    },[currentImgIndex]);
 
     const onClickImg = (e) => {
         setCurrImg(e.target.src);
@@ -67,23 +54,31 @@ const SlideImage = () => {
 
     const leftClick = () => {
         const x = stageWidth / 5;
+        const img_len = imgArr.length;
         console.log('currIndex-pre',currentImgIndex);
-        setCurrentImgIndex(currentImgIndex - 1);
         setImgStyle({
-            transform: `translateX(${x*(currentImgIndex-1)}px)`,
+            transform: `translateX(${-x}px)`,
             transition: `all 0.3s ease-in-out`,
         });
+        setTimeout(() => {
+            setCurrentImgIndex((currentImgIndex-1+img_len)%img_len);
+        },350);
         console.log('currIndex',currentImgIndex);
         console.log('translateX',x*(currentImgIndex-1));
     };
     
     const rightClick = () => {
         const x = stageWidth / 5;
-        setCurrentImgIndex(currentImgIndex + 1);
+        const img_len = imgArr.length;
+        
         setImgStyle({
-            transform: `translateX(${x*(currentImgIndex+1)}px)`,
+            transform: `translateX(${x}px)`,
             transition: `all 0.3s ease-in-out`,
         });
+        setTimeout(()=>{
+            setCurrentImgIndex((currentImgIndex + 1)%img_len);
+        },350);
+        
     };
 
     return (
